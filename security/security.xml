@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The five roles -->
+    <record id="module_category_erp" model="ir.module.category">
+        <field name="name">Multi-Company ERP</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="group_erp_sales" model="res.groups">
+        <field name="name">Sales</field>
+        <field name="category_id" ref="module_category_erp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('base.group_partner_manager'))]"/>
+    </record>
+
+    <record id="group_erp_purchase" model="res.groups">
+        <field name="name">Purchase</field>
+        <field name="category_id" ref="module_category_erp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('base.group_partner_manager'))]"/>
+    </record>
+
+    <record id="group_erp_warehouse" model="res.groups">
+        <field name="name">Warehouse</field>
+        <field name="category_id" ref="module_category_erp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_erp_accountant" model="res.groups">
+        <field name="name">Accountant</field>
+        <field name="category_id" ref="module_category_erp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_erp_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="module_category_erp"/>
+        <field name="implied_ids" eval="[
+            (4, ref('group_erp_sales')),
+            (4, ref('group_erp_purchase')),
+            (4, ref('group_erp_warehouse')),
+            (4, ref('group_erp_accountant')),
+        ]"/>
+    </record>
+
+    <!-- Logic 1: company isolation. Every model, every role. -->
+    <record id="rule_erp_product_company" model="ir.rule">
+        <field name="name">Product: own company only</field>
+        <field name="model_id" ref="model_erp_product"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_stock_move_company" model="ir.rule">
+        <field name="name">Stock Move: own company only</field>
+        <field name="model_id" ref="model_erp_stock_move"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_sale_order_company" model="ir.rule">
+        <field name="name">Sale Order: own company only</field>
+        <field name="model_id" ref="model_erp_sale_order"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_sale_order_line_company" model="ir.rule">
+        <field name="name">Sale Order Line: own company only</field>
+        <field name="model_id" ref="model_erp_sale_order_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_purchase_order_company" model="ir.rule">
+        <field name="name">Purchase Order: own company only</field>
+        <field name="model_id" ref="model_erp_purchase_order"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_purchase_order_line_company" model="ir.rule">
+        <field name="name">Purchase Order Line: own company only</field>
+        <field name="model_id" ref="model_erp_purchase_order_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_invoice_company" model="ir.rule">
+        <field name="name">Invoice: own company only</field>
+        <field name="model_id" ref="model_erp_invoice"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_erp_payment_company" model="ir.rule">
+        <field name="name">Payment: own company only</field>
+        <field name="model_id" ref="model_erp_payment"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

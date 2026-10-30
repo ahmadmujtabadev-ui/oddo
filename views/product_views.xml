@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="erp_product_view_list" model="ir.ui.view">
+        <field name="name">erp.product.list</field>
+        <field name="model">erp.product</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="price"/>
+                <field name="quantity"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="erp_product_view_form" model="ir.ui.view">
+        <field name="name">erp.product.form</field>
+        <field name="model">erp.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="price"/>
+                            <field name="quantity"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Stock Moves" name="moves" groups="my_module.group_erp_warehouse">
+                            <field name="move_ids" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="origin"/>
+                                    <field name="quantity"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="erp_product_action" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">erp.product</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Logic 3: the stock ledger. Read-only, nobody types into it. -->
+    <record id="erp_stock_move_view_list" model="ir.ui.view">
+        <field name="name">erp.stock.move.list</field>
+        <field name="model">erp.stock.move</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="product_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="origin"/>
+                <field name="quantity" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="erp_stock_move_action" model="ir.actions.act_window">
+        <field name="name">Stock Moves</field>
+        <field name="res_model">erp.stock.move</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</odoo>

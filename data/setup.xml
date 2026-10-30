@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Three example companies -->
+    <record id="company_a" model="res.company">
+        <field name="name">Company A</field>
+    </record>
+
+    <record id="company_b" model="res.company">
+        <field name="name">Company B</field>
+    </record>
+
+    <record id="company_c" model="res.company">
+        <field name="name">Company C</field>
+    </record>
+
+    <!-- The Odoo admin user gets the ERP Admin role and all three companies, starting in Company A -->
+    <record id="base.user_admin" model="res.users">
+        <field name="company_id" ref="company_a"/>
+        <field name="company_ids" eval="[
+            (4, ref('company_a')),
+            (4, ref('company_b')),
+            (4, ref('company_c')),
+        ]"/>
+        <field name="groups_id" eval="[(4, ref('group_erp_admin'))]"/>
+    </record>
+
+    <!-- Each company sells its own kind of product (stock starts at 0: buy first) -->
+    <record id="product_laptop" model="erp.product">
+        <field name="name">Laptop</field>
+        <field name="company_id" ref="company_a"/>
+        <field name="price">1000</field>
+    </record>
+
+    <record id="product_desk" model="erp.product">
+        <field name="name">Office Desk</field>
+        <field name="company_id" ref="company_b"/>
+        <field name="price">250</field>
+    </record>
+
+    <record id="product_rice" model="erp.product">
+        <field name="name">Rice Bag 5kg</field>
+        <field name="company_id" ref="company_c"/>
+        <field name="price">12</field>
+    </record>
+
+</odoo>

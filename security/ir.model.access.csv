@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_erp_product_sales,erp.product sales,model_erp_product,group_erp_sales,1,0,0,0
+access_erp_product_purchase,erp.product purchase,model_erp_product,group_erp_purchase,1,0,0,0
+access_erp_product_warehouse,erp.product warehouse,model_erp_product,group_erp_warehouse,1,0,0,0
+access_erp_product_admin,erp.product admin,model_erp_product,group_erp_admin,1,1,1,1
+access_erp_stock_move_warehouse,erp.stock.move warehouse,model_erp_stock_move,group_erp_warehouse,1,0,0,0
+access_erp_sale_order_sales,erp.sale.order sales,model_erp_sale_order,group_erp_sales,1,1,1,1
+access_erp_sale_order_accountant,erp.sale.order accountant,model_erp_sale_order,group_erp_accountant,1,0,0,0
+access_erp_sale_order_line_sales,erp.sale.order.line sales,model_erp_sale_order_line,group_erp_sales,1,1,1,1
+access_erp_purchase_order_purchase,erp.purchase.order purchase,model_erp_purchase_order,group_erp_purchase,1,1,1,1
+access_erp_purchase_order_warehouse,erp.purchase.order warehouse,model_erp_purchase_order,group_erp_warehouse,1,1,0,0
+access_erp_purchase_order_line_purchase,erp.purchase.order.line purchase,model_erp_purchase_order_line,group_erp_purchase,1,1,1,1
+access_erp_purchase_order_line_warehouse,erp.purchase.order.line warehouse,model_erp_purchase_order_line,group_erp_warehouse,1,0,0,0
+access_erp_invoice_sales,erp.invoice sales,model_erp_invoice,group_erp_sales,1,0,0,0
+access_erp_invoice_accountant,erp.invoice accountant,model_erp_invoice,group_erp_accountant,1,1,0,0
+access_erp_payment_accountant,erp.payment accountant,model_erp_payment,group_erp_accountant,1,1,1,1

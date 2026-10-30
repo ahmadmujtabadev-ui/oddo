@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_erp_sale_order" model="ir.sequence">
+        <field name="name">Sale Order</field>
+        <field name="code">erp.sale.order</field>
+        <field name="prefix">SO/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_erp_purchase_order" model="ir.sequence">
+        <field name="name">Purchase Order</field>
+        <field name="code">erp.purchase.order</field>
+        <field name="prefix">PO/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_erp_invoice" model="ir.sequence">
+        <field name="name">Invoice</field>
+        <field name="code">erp.invoice</field>
+        <field name="prefix">INV/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

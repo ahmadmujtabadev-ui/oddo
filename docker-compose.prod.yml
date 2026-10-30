@@ -1,0 +1,64 @@
+# Production stack for Coolify (Docker Compose build pack).
+# In Coolify set "Docker Compose Location" to /docker-compose.prod.yml.
+#
+# - SERVICE_PASSWORD_POSTGRES: Coolify generates this once and keeps it, so the
+#   database password is never in git.
+# - SERVICE_FQDN_ODOO_8069: Coolify shows a Domain field for the odoo service
+#   and routes it to port 8069 through its proxy (HTTPS included). That is why
+#   there is no "ports:" here: the app is only reachable through the proxy.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 5s
+      retries: 12
+
+  odoo:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8069"
+    environment:
+      - SERVICE_FQDN_ODOO_8069
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=${SERVICE_PASSWORD_POSTGRES}
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes:
+      # Uploaded files and attachments. Without this they vanish on every redeploy.
+      - odoo-data:/var/lib/odoo
+    # Creates the database "erp" on the first run and installs the module. Later
+    # runs just start it. --proxy-mode makes Odoo trust the proxy's X-Forwarded-*
+    # headers; --no-database-list turns off the public database manager page.
+    # ($$ is a literal $ in compose files.)
+    command:
+      - odoo
+      - -d
+      - erp
+      - --db-filter=^erp$$
+      - --no-database-list
+      - --proxy-mode
+      - -i
+      - my_module
+      - --without-demo=all
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8069/web/health', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      # First boot creates the database and installs the module, which takes a while.
+      start_period: 180s
+
+volumes:
+  pgdata:
+  odoo-data:

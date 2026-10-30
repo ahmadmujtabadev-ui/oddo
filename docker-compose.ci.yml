@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    # The database is thrown away after every run, so keep it in RAM.
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  tests:
+    image: odoo:18
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: odoo
+      DB_PASSWORD: odoo
+      DB_NAME: ci_test
+      MODULE: my_module
+      PYTHONDONTWRITEBYTECODE: "1"
+    volumes:
+      - .:/mnt/extra-addons/my_module:ro
+    entrypoint: ["bash", "/mnt/extra-addons/my_module/ci/run-tests.sh"]

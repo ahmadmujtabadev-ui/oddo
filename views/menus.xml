@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_erp_root" name="ERP" sequence="10"/>
+
+    <menuitem id="menu_erp_sale_order" name="Sale Orders" parent="menu_erp_root"
+              action="erp_sale_order_action" sequence="10" groups="group_erp_sales"/>
+
+    <menuitem id="menu_erp_purchase_order" name="Purchase Orders" parent="menu_erp_root"
+              action="erp_purchase_order_action" sequence="20"
+              groups="group_erp_purchase,group_erp_warehouse"/>
+
+    <menuitem id="menu_erp_product" name="Products" parent="menu_erp_root"
+              action="erp_product_action" sequence="30"
+              groups="group_erp_sales,group_erp_purchase,group_erp_warehouse"/>
+
+    <menuitem id="menu_erp_stock_move" name="Stock Moves" parent="menu_erp_root"
+              action="erp_stock_move_action" sequence="40" groups="group_erp_warehouse"/>
+
+    <menuitem id="menu_erp_invoice" name="Invoices" parent="menu_erp_root"
+              action="erp_invoice_action" sequence="50"
+              groups="group_erp_accountant,group_erp_sales"/>
+
+</odoo>

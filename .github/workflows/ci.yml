@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# A new push to the same branch supersedes the run in flight.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Install module and run tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install module and run tests
+        shell: bash
+        run: |
+          mkdir -p ci-logs
+          docker compose -f docker-compose.ci.yml run --rm tests 2>&1 \
+            | tee ci-logs/odoo-ci.log
+
+      - name: Upload Odoo log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odoo-ci-log
+          path: ci-logs/odoo-ci.log
+          if-no-files-found: ignore

@@ -1,0 +1,21 @@
+{
+    "name": "Multi-Company ERP",
+    "summary": "Three companies buy, sell, invoice and collect payment on their own products.",
+    "version": "18.0.1.0.0",
+    "category": "Custom",
+    "license": "LGPL-3",
+    "depends": ["base"],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/sequence.xml",
+        "data/setup.xml",
+        "views/product_views.xml",
+        "views/sale_views.xml",
+        "views/purchase_views.xml",
+        "views/invoice_views.xml",
+        "views/menus.xml",
+    ],
+    "application": True,
+    "installable": True,
+}

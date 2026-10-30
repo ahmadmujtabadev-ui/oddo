@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="erp_sale_order_view_list" model="ir.ui.view">
+        <field name="name">erp.sale.order.list</field>
+        <field name="model">erp.sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="erp_sale_order_view_form" model="ir.ui.view">
+        <field name="name">erp.sale.order.form</field>
+        <field name="model">erp.sale.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"
+                            invisible="state != 'draft'" groups="my_module.group_erp_sales"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="invoice_id" invisible="not invoice_id"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="subtotal"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_total"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="erp_sale_order_action" model="ir.actions.act_window">
+        <field name="name">Sale Orders</field>
+        <field name="res_model">erp.sale.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
