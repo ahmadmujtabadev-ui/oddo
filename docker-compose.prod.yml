@@ -40,9 +40,11 @@ services:
     # Creates the database "erp" on the first run and installs the module. Later
     # runs just start it. --proxy-mode makes Odoo trust the proxy's X-Forwarded-*
     # headers; --no-database-list turns off the public database manager page.
+    # --addons-path points at the folder the Dockerfile copies the addon into.
     # ($$ is a literal $ in compose files.)
     command:
       - odoo
+      - --addons-path=/mnt/extra-addons,/opt/odoo-addons
       - -d
       - erp
       - --db-filter=^erp$$
