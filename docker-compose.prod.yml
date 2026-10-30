@@ -1,11 +1,16 @@
 # Production stack for Coolify (Docker Compose build pack).
-# In Coolify set "Docker Compose Location" to /docker-compose.prod.yml.
+# In Coolify set "Docker Compose Location" to /docker-compose.prod.yml
+# (the default, docker-compose.yaml, is not this file; docker-compose.yml is the
+# local dev stack and is NOT safe to run on a public server).
 #
 # - SERVICE_PASSWORD_POSTGRES: Coolify generates this once and keeps it, so the
 #   database password is never in git.
 # - SERVICE_FQDN_ODOO_8069: Coolify shows a Domain field for the odoo service
 #   and routes it to port 8069 through its proxy (HTTPS included). That is why
 #   there is no "ports:" here: the app is only reachable through the proxy.
+# - db_data / odoo_data are new names on purpose: a volume created earlier by the
+#   dev stack still holds the dev password (odoo), and Postgres only applies
+#   POSTGRES_PASSWORD to a brand-new volume.
 services:
   db:
     image: postgres:16
@@ -14,9 +19,9 @@ services:
       POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
       POSTGRES_DB: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      test: ["CMD-SHELL", "pg_isready -U odoo -d postgres"]
       interval: 5s
       retries: 12
 
@@ -36,7 +41,7 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
       # Uploaded files and attachments. Without this they vanish on every redeploy.
-      - odoo-data:/var/lib/odoo
+      - odoo_data:/var/lib/odoo
     # Creates the database "erp" on the first run and installs the module. Later
     # runs just start it. --proxy-mode makes Odoo trust the proxy's X-Forwarded-*
     # headers; --no-database-list turns off the public database manager page.
@@ -62,5 +67,5 @@ services:
       start_period: 180s
 
 volumes:
-  pgdata:
-  odoo-data:
+  db_data:
+  odoo_data:
